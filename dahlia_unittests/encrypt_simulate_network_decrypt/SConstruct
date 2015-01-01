@@ -1,0 +1,6 @@
+env = Environment() #Init scons enviroment
+env.Append(CCFLAGS = ['-std=c++11', '-g']) #Compile time flags; enable c11 standard; enable debug symbols
+env.Append(LIBPATH = ['.'])
+env.Append(LIBS = ['zmq', 'sodium', 'jansson']) #Link flags
+env.Decider('MD5'); #use MD5 to decide when to rebuild
+env.Program(target = 'runable_esnd_test', source = ["esnd_test.cpp"])
