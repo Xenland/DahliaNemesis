@@ -11,7 +11,7 @@ class crypto_manager : public QObject
     Q_OBJECT
 public:
     explicit crypto_manager(QObject *parent = 0);
-    void get_identity_encoded();
+    char * get_identity_encoded();
 
 private:
     unsigned char publickey[crypto_box_PUBLICKEYBYTES];

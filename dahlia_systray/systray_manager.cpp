@@ -10,6 +10,9 @@ systray_manager::systray_manager(QWidget *parent) : QWidget(parent){
     //Init crypto
     crypto = new crypto_manager();
 
+    //tell network our identity
+    network->set_identity(crypto->get_identity_encoded());
+
     //Initalize the system tray operations
     system_tray = new QSystemTrayIcon();
 

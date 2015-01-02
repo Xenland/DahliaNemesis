@@ -10,9 +10,10 @@ crypto_manager::crypto_manager(QObject *parent) :
     crypto_box_keypair(publickey, secretkey);
 }
 
-void crypto_manager::get_identity_encoded(){
+char * crypto_manager::get_identity_encoded(){
     //Convert identity(binary) to hex
-    char hexoutput[crypto_box_PUBLICKEYBYTES * 2 + 1];
+    char * hexoutput = (char*)malloc(crypto_box_PUBLICKEYBYTES * 2 + 1);
     sodium_bin2hex(hexoutput, (crypto_box_PUBLICKEYBYTES * 2 + 1), publickey, (size_t)crypto_box_PUBLICKEYBYTES);
     qDebug() << hexoutput;
+    return hexoutput;
 }

@@ -6,6 +6,10 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDebug>
+#include <QTimer>
+#include <QMap>
+#include <QList>
+#include "jansson.h"
 class network_server : public QObject
 {
     Q_OBJECT
@@ -14,8 +18,8 @@ public:
 
 private:
     QTcpServer * server;
-    QList<QTcpSocket*> client_list;
-
+    QMap<QTcpSocket*, QString> client_map;
+    QMap<QString, json_t*> tx_msg_map;
 signals:
 
 public slots:
