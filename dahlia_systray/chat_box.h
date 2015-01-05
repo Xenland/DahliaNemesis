@@ -19,6 +19,7 @@ class chat_box : public QWidget
 public:
     explicit chat_box(QWidget *parent = 0);
     void setup_chat(QString, QString);
+    void incoming_msg(QString);
 
 protected:
     void closeEvent(QCloseEvent *event);

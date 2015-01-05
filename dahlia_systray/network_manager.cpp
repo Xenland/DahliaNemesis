@@ -7,7 +7,7 @@ network_manager::network_manager(QObject *parent) : QObject(parent) {
     socket = new QTcpSocket();
     connect(socket, SIGNAL(connected()),this, SLOT(client_connected_to_server()));
     socket->connectToHost(QString("127.0.0.1"), 5555);
-    //connect(socket, SIGNAL(readyRead()), this, SLOT(read_message()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(read_message()));
 }
 
 void network_manager::send_txt_message(QString identity, QString message_to_send){
@@ -59,8 +59,14 @@ void network_manager::client_connected_to_server(){
     socket->write(greetings_char_data, (quint64)strlen(greetings_char_data));
 }
 
-/*
+
 void network_manager::read_message(){
-    qDebug() << socket->readAll();
+    //convert char to json_t
+    char * incoming_msg_char = socket->readAll().data();
+    json_error_t incoming_msg_error;
+    json_t * incoming_msg = json_loadb(incoming_msg_char, strlen(incoming_msg_char)+1, JSON_DISABLE_EOF_CHECK, &incoming_msg_error);
+
+    //push to chat manager
+    emit new_incoming_msg(incoming_msg);
 }
-*/
+

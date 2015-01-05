@@ -6,7 +6,10 @@ network_server::network_server(QObject *parent) : QObject(parent){
     client_map = QMap<QTcpSocket*, QString>();
     server = new QTcpServer();
     connect(server, SIGNAL(newConnection()), this, SLOT(slot_new_connection()));
-    qDebug() << server->listen(QHostAddress::Any, 5555);
+    if(server->listen(QHostAddress::Any, 5555) == true){
+        QTimer::singleShot(1, this, SLOT(slot_unload_msg_queue()));
+    }
+
 }
 
 void network_server::slot_new_connection(){
@@ -96,4 +99,28 @@ void network_server::slot_readyRead(){
             qDebug() << "no recognized request type";
         }
     }
+}
+
+void network_server::slot_unload_msg_queue(){
+    //scroll the connected clients and unload/push queued up messages per client
+    QMap<QTcpSocket*, QString>::const_iterator iterator = client_map.constBegin();
+    while(iterator != client_map.constEnd()){
+        if(tx_msg_map.contains(iterator.value()) == true){
+            /* client connected has queued messages to be pushed to client */
+            //extract multi msg queue
+            json_t * multi_msg_queue_root = tx_msg_map.value(iterator.value());
+
+            //convert json_t to char string
+            char * multi_msg_queue_char = json_dumps(multi_msg_queue_root, JSON_COMPACT);
+
+            //push to client socket
+            QTcpSocket * client_socket = client_map.key(iterator.value());
+            client_socket->write(multi_msg_queue_char, (quint64)strlen(multi_msg_queue_char));
+
+            //remove messages from queue
+            qDebug() << "removed:" << tx_msg_map.remove(iterator.value());
+        }
+        ++iterator;
+    }
+    QTimer::singleShot(1, this, SLOT(slot_unload_msg_queue()));
 }

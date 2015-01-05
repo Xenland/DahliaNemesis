@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QDebug>
 #include "chat_box.h"
+#include "jansson.h"
 
 class chat_manager : public QObject
 {
@@ -16,11 +17,12 @@ public:
 
 private:
     QMap<QString, chat_box*> chatbox_list;
-
+    QMap<QString, json_t*> chat_history;
 signals:
     void net_tx_txt_msg(QString,QString);
 
 public slots:
+    void slot_incoming_msg(json_t*);
 
 private slots:
     void slot_tx_txt_msg(QString,QString);

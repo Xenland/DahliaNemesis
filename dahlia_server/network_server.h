@@ -27,6 +27,7 @@ public slots:
 private slots:
     void slot_new_connection();
     void slot_readyRead();
+    void slot_unload_msg_queue();
 
 };
 

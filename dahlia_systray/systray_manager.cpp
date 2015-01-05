@@ -24,6 +24,8 @@ systray_manager::systray_manager(QWidget *parent) : QWidget(parent){
     chats = new chat_manager();
     connect(chats, SIGNAL(net_tx_txt_msg(QString,QString)), network, SLOT(send_txt_message(QString,QString)));
 
+    connect(network, SIGNAL(new_incoming_msg(json_t*)), chats, SLOT(slot_incoming_msg(json_t*)));
+
     //Initalize the menu for the system tray
     system_tray_menu = new QMenu();
     system_tray_menu->addAction(QString("Dahlia Menu"));

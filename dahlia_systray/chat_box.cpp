@@ -43,6 +43,12 @@ void chat_box::setup_chat(QString name, QString identity){
     header->setText(QString("<h3>%1</h3>").arg(name));
 }
 
+void chat_box::incoming_msg(QString msg){
+    int row_count = chat_history_table->rowCount();
+    QStandardItem * msg_stditem = new QStandardItem(msg);
+    chat_history_table->setItem(row_count, 0, msg_stditem);
+}
+
 
 void chat_box::send_message(){
     //get the inputted message

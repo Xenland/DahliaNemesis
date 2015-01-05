@@ -21,12 +21,14 @@ private:
     char * hexencoded_identity;
 
 signals:
+    void new_incoming_msg(json_t*);
 
 public slots:
     void send_txt_message(QString,QString);
 
 private slots:
     void client_connected_to_server();
+    void read_message();
 };
 
 #endif // NETWORK_MANAGER_H
