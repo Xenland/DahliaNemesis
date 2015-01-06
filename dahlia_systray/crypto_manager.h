@@ -12,10 +12,12 @@ class crypto_manager : public QObject
 public:
     explicit crypto_manager(QObject *parent = 0);
     char * get_identity_encoded();
-
+    QMap<QString, char*> encrypt_txt_msg(QString, QString);
 private:
     unsigned char publickey[crypto_box_PUBLICKEYBYTES];
     unsigned char secretkey[crypto_box_SECRETKEYBYTES];
+
+    unsigned char * get_secret_identity();
 
 signals:
 

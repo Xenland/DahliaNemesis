@@ -60,11 +60,11 @@ void network_server::slot_readyRead(){
                 qDebug() << json_dumps(multi_msg_root, JSON_COMPACT);
             }else{
                 qDebug() << "NEW MULTI MSG";
+                //extract nonce
+                char * nonce = (char*)json_string_value(json_object_get(root_msg, "nonce"));
+
                 //extract message (payload)
                 char * message = (char*)json_string_value(json_object_get(root_msg, "msg"));
-
-                //extract recipient_identity
-                char * recipient_identity = (char*)json_string_value(json_object_get(root_msg, "recipient_identity"));
 
                 //create a json package that will store potentially multiple messages
                 json_t * multi_msg_root = json_object();
@@ -75,6 +75,9 @@ void network_server::slot_readyRead(){
                 json_t * recv_msg_root = json_object();
                 json_t * recv_sender_identity = json_string(client_map[socket].toUtf8().data());
                 json_object_set(recv_msg_root, "sender_identity", recv_sender_identity);
+
+                json_t * recv_nonce = json_string(nonce);
+                json_object_set(recv_msg_root, "nonce", recv_nonce);
 
                 json_t * recv_msg = json_string(message);
                 json_object_set(recv_msg_root, "msg", recv_msg);

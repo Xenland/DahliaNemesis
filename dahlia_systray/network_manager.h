@@ -8,6 +8,8 @@
 #include <QTcpSocket>
 #include <sodium.h>
 #include "jansson.h"
+#include "crypto_manager.h"
+
 class network_manager : public QObject
 {
     Q_OBJECT
@@ -24,7 +26,7 @@ signals:
     void new_incoming_msg(json_t*);
 
 public slots:
-    void send_txt_message(QString,QString);
+    void send_txt_message(QString,QString,QString);
 
 private slots:
     void client_connected_to_server();

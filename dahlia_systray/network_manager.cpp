@@ -10,7 +10,7 @@ network_manager::network_manager(QObject *parent) : QObject(parent) {
     connect(socket, SIGNAL(readyRead()), this, SLOT(read_message()));
 }
 
-void network_manager::send_txt_message(QString identity, QString message_to_send){
+void network_manager::send_txt_message(QString identity, QString nonce, QString message_to_send){
     /* Generate a JSON message packet to send */
     //create json root
     json_t * root_msg = json_object(); //root of json message packet
@@ -22,6 +22,10 @@ void network_manager::send_txt_message(QString identity, QString message_to_send
     //convert recipient_identity(qstring) to json_string and insert into root
     json_t * recipient_identity_info = json_string(identity.toUtf8().data());
     json_object_set(root_msg, "recipient_identity", recipient_identity_info);
+
+    //convert nonce(qstring) to json_string and insert into root
+    json_t * nonce_info = json_string(nonce.toUtf8().data());
+    json_object_set(root_msg, "nonce", nonce_info);
 
     //convert message_to_send(qstring) to json_string and insert into root
     json_t * msg_to_send = json_string(message_to_send.toUtf8().data());

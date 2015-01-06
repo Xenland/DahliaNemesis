@@ -30,4 +30,4 @@ HEADERS  += systray_manager.h \
 RESOURCES += \
     systray_resource.qrc
 
-LIBS += -lsodium -lzmq -ljansson
+LIBS += -lsodium -ljansson

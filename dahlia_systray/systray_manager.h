@@ -43,6 +43,7 @@ private slots:
     void account_triggered();
     void contacts_triggered();
     void show_chatbox(QString,QString);
+    void slot_send_txt_message(QString,QString);
     void exit_app();
 };
 

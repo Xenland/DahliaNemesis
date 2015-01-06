@@ -22,7 +22,7 @@ systray_manager::systray_manager(QWidget *parent) : QWidget(parent){
 
     //init chats
     chats = new chat_manager();
-    connect(chats, SIGNAL(net_tx_txt_msg(QString,QString)), network, SLOT(send_txt_message(QString,QString)));
+    connect(chats, SIGNAL(net_tx_txt_msg(QString,QString)), this, SLOT(slot_send_txt_message(QString,QString)));
 
     connect(network, SIGNAL(new_incoming_msg(json_t*)), chats, SLOT(slot_incoming_msg(json_t*)));
 
@@ -69,6 +69,20 @@ void systray_manager::account_triggered(){
 
 void systray_manager::show_chatbox(QString name, QString identity){
     chats->show_chat(name, identity);
+}
+
+void systray_manager::slot_send_txt_message(QString identity, QString message_to_send){
+    //Do encryption before sending to network manager
+    QMap<QString, char*> encrypted_message_info = crypto->encrypt_txt_msg(identity, message_to_send);
+
+    //convert char to qstrings for the network functions
+    char * nonce_char = encrypted_message_info.value(QString("nonce"));
+    QString nonce = QString(nonce_char);
+    char * ciphertext_char = encrypted_message_info.value(QString("ciphertext"));
+    QString ciphertext = QString(ciphertext_char);
+
+    //send to network manager
+    network->send_txt_message(identity, nonce, ciphertext);
 }
 
 void systray_manager::exit_app(){
